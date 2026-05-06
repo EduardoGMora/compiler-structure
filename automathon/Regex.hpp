@@ -12,6 +12,7 @@ class Regex {   // Regular Expression
 
         Pattern* getPattern() const;
         virtual bool isValid(const std::string& input) const = 0;
+        virtual bool isAcceptedSymbol(char symbol) const = 0;
 };
 
 #endif // REGEX_HPP

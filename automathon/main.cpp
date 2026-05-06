@@ -1,35 +1,63 @@
 #include <iostream>
+#include <string>
 #include "Pattern.hpp"
 #include "FSA.hpp"
 #include "AlphaExpression.hpp"
+#include "NumericExpression.hpp"
 
-using namespace std;
+int main() {
+    int option = 0;
+    std::string input;
 
-int main(int argc, char* argv[]) {
-    Pattern* p = new Pattern("[A-Za-z]+");
-    cout << "Pattern: " << p->getPattern() << endl;
+    do {
+        std::cout << "==========================================\n";
+        std::cout << " Deterministic Finite State Automata (FSA)\n";
+        std::cout << " 1. Validate alphabetic string [A-Za-z]+\n";
+        std::cout << " 2. Validate numeric string [0-9]+\n";
+        std::cout << " 3. Exit\n";
+        std::cout << "==========================================\n";
+        std::cout << "Choose an option: ";
+        std::cin >> option;
+        std::cin.ignore();
 
-    Regex* alphaExp = new AlphaExpression(p);
+        if (option == 1) {
+            Pattern* pattern = new Pattern("[A-Za-z]+");
+            Regex* expression = new AlphaExpression(pattern);
+            FSA* fsa = new FSA(expression);
 
-    FSA* fsa = new FSA(alphaExp);
+            std::cout << "Enter an alphabetic string: ";
+            std::getline(std::cin, input);
 
-    string input;
+            if (fsa->process(input))
+                std::cout << "Result: ACCEPTED\n";
+            else
+                std::cout << "Result: REJECTED\n";
 
-    if (argc > 1) {
-        input = argv[1];
-    } else {
-        cout << "Enter a string to validate: ";
-        cin >> input;
-    }   
+            std::cout << "Final state: q" << fsa->getCurrentState() << "\n\n";
+            delete fsa;
+        }
+        else if (option == 2) {
+            Pattern* pattern = new Pattern("[0-9]+");
+            Regex* expression = new NumericExpression(pattern);
+            FSA* fsa = new FSA(expression);
 
-    cout << "Input: " << input << endl;
-    
-    if(fsa->process(input))
-        cout << "ACCEPTED\n";
-    else
-        cout << "REJECTED\n";
+            std::cout << "Enter a numeric string: ";
+            std::getline(std::cin, input);
 
-    delete fsa;
+            if (fsa->process(input))
+                std::cout << "Result: ACCEPTED\n";
+            else
+                std::cout << "Result: REJECTED\n";
 
+            std::cout << "Final state: q" << fsa->getCurrentState() << "\n\n";
+            delete fsa;
+        }
+        else if (option != 3) {
+            std::cout << "Invalid option.\n\n";
+        }
+
+    } while (option != 3);
+
+    std::cout << "Program finished.\n";
     return 0;
 }

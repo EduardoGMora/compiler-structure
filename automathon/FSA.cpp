@@ -20,14 +20,14 @@ void FSA::reset() {
 bool FSA::transition(char symbol) {
     switch (currentState) {
         case 0:
-            if (std::isalpha(static_cast<unsigned char>(symbol))) {
+            if (regex->isAcceptedSymbol(symbol)) {
                 currentState = 1;
                 return true;
             }
             return false;
 
         case 1:
-            if (std::isalpha(static_cast<unsigned char>(symbol))) {
+            if (regex->isAcceptedSymbol(symbol)) {
                 currentState = 1;
                 return true;
             }

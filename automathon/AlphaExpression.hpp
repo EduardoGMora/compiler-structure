@@ -9,6 +9,7 @@ class AlphaExpression : public Regex {
         virtual ~AlphaExpression();
 
         virtual bool isValid(const std::string& input) const override;
+        virtual bool isAcceptedSymbol(char symbol) const override;
 };
 
 

@@ -19,3 +19,7 @@ bool AlphaExpression::isValid(const std::string& input) const {
 
     return true;
 }
+
+bool AlphaExpression::isAcceptedSymbol(char symbol) const {
+    return std::isalpha(static_cast<unsigned char>(symbol)) != 0;
+}
