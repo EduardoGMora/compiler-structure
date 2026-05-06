@@ -262,6 +262,7 @@ expression:
     | expression EQ expression
     | expression NE expression
     | '(' expression ')'
+    | ID '(' argument_list_opt ')'
     | ID
     | NUMBER
     | FLOAT_NUMBER
