@@ -19,7 +19,7 @@ static void report_context_error(const char *context) {
 }
 %}
 
-%error-verbose
+%define parse.error verbose
 
 %token INCLUDE DEFINE
 %token INT FLOAT CHAR DOUBLE VOID
