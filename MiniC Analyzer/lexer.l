@@ -13,7 +13,8 @@ id          {letter}({letter}|{digit})*
 number      {digit}+
 floatnum    {digit}+\.{digit}+
 string      \"[^\"]*\"
-comment     "//".*|/\*([^*]|\*+[^*/])*\*+/
+
+%x BLOCK_COMMENT
 
 %%
 
@@ -30,7 +31,13 @@ comment     "//".*|/\*([^*]|\*+[^*/])*\*+/
 "if"                { return IF; }
 "else"              { return ELSE; }
 "while"             { return WHILE; }
-"main"              { return MAIN; }
+"func"              { return FUNC; }
+
+"//".*              ;
+"/*"                { BEGIN(BLOCK_COMMENT); }
+<BLOCK_COMMENT>"*/" { BEGIN(INITIAL); }
+<BLOCK_COMMENT>.    ;
+<BLOCK_COMMENT>\n   ;
 
 "<="                { return LE; }
 ">="                { return GE; }
@@ -40,7 +47,7 @@ comment     "//".*|/\*([^*]|\*+[^*/])*\*+/
 {floatnum}          { return FLOAT_NUMBER; }
 {number}            { return NUMBER; }
 {string}            { return STRING_LITERAL; }
-{id}                { return ID; }
+{id}                { yylval.sval = strdup(yytext); return ID; }
 
 "("                 { return '('; }
 ")"                 { return ')'; }
@@ -59,16 +66,9 @@ comment     "//".*|/\*([^*]|\*+[^*/])*\*+/
 "<"                 { return '<'; }
 ">"                 { return '>'; }
 
-"//"                { /* Comentario de una línea, ignorar */ }
-"/*"                { BEGIN(COMMENT); }
-<COMMENT>"*/"       { BEGIN(INITIAL); }
-<COMMENT>.|\n       { /* Ignorar contenido del comentario */ }
-
 [ \t\r\n]+          ;
 
 .                   {
                         printf("Carácter no reconocido en línea %d: %s\n", yylineno, yytext);
                         return yytext[0];
                     }
-
-
